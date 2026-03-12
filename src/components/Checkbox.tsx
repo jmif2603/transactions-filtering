@@ -22,7 +22,6 @@ const Checkbox = ({
   // Determine the visual state
   const isChecked = checked && !indeterminate;
   const isIndeterminate = indeterminate;
-  const _isUnchecked = !checked && !indeterminate;
 
   // Colors from Figma design tokens
   const colors = {

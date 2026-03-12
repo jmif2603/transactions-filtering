@@ -118,9 +118,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     };
 
-    // Border width adjustment for fill variant
-    const _borderWidthClass = variant === 'fill' ? 'border-2' : variant === 'outline' ? 'border' : 'border-0';
-
     return (
       <button
         ref={ref}

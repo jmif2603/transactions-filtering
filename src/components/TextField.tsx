@@ -1,5 +1,4 @@
-import React, { forwardRef, useId } from 'react';
-import type { ReactNode } from 'react';
+import { forwardRef, useId } from 'react';
 import Input from './Input';
 import type { InputProps } from './Input';
 

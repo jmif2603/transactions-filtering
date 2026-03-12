@@ -15,7 +15,9 @@
       "Bash(curl -s http://127.0.0.1:3845/sse)",
       "Bash(curl -s --max-time 3 http://127.0.0.1:3845/mcp)",
       "mcp__figma__get_design_context",
-      "mcp__figma__get_screenshot"
+      "mcp__figma__get_screenshot",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:3845/assets/ea9a70d45ae9572e6c227359de93bedf69961b10.svg)"
     ]
   }
 }

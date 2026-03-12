@@ -1,6 +1,4 @@
-import React from 'react';
 import CheckboxWithLabel from './components/CheckboxWithLabel';
-import Button from './components/Button';
 
 export interface BottomSheetTypesProps {
   /** Whether "Money In" is selected */
@@ -22,7 +20,7 @@ const BottomSheetTypes = ({
   moneyOutSelected = false,
   onMoneyInChange,
   onMoneyOutChange,
-  onClearSelection,
+  onClearSelection: _onClearSelection,
   onOverlayPress,
 }: BottomSheetTypesProps) => {
   return (
