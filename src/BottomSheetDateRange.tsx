@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import RadioButtonWithLabel from './components/RadioButtonWithLabel';
 import Button from './components/Button';
 import DateRangeCustomRange from './DateRangeCustomRange';
@@ -45,7 +45,7 @@ const BottomSheetDateRange = ({
   customRange,
   onOptionChange,
   onCustomRangeChange,
-  onClearSelection,
+  onClearSelection: _onClearSelection,
   onOverlayPress,
 }: BottomSheetDateRangeProps) => {
   const [showCustomRange, setShowCustomRange] = useState(false);

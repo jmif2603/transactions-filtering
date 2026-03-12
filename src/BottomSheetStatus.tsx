@@ -1,6 +1,4 @@
-import React from 'react';
 import CheckboxWithLabel from './components/CheckboxWithLabel';
-import Button from './components/Button';
 
 export interface BottomSheetStatusProps {
   /** Whether "Cleared" is selected */
@@ -22,7 +20,7 @@ const BottomSheetStatus = ({
   pendingSelected = false,
   onClearedChange,
   onPendingChange,
-  onClearSelection,
+  onClearSelection: _onClearSelection,
   onOverlayPress,
 }: BottomSheetStatusProps) => {
   return (

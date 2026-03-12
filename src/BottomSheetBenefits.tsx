@@ -1,6 +1,4 @@
-import React from 'react';
 import CheckboxWithLabel from './components/CheckboxWithLabel';
-import Button from './components/Button';
 
 export type BenefitKey =
   | 'healthSavings'
@@ -63,7 +61,7 @@ const DEFAULT_SELECTIONS: BenefitSelections = {
 const BottomSheetBenefits = ({
   selections = DEFAULT_SELECTIONS,
   onSelectionChange,
-  onClearSelection,
+  onClearSelection: _onClearSelection,
   onOverlayPress,
 }: BottomSheetBenefitsProps) => {
   return (

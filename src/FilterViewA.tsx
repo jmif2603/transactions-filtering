@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import StatusBarIphone from './components/StatusBarIphone';
 import TextField from './components/TextField';
 import ButtonBar from './components/ButtonBar';
@@ -6,7 +6,7 @@ import BottomSheetStatus from './BottomSheetStatus';
 import BottomSheetTypes from './BottomSheetTypes';
 import BottomSheetBenefits from './BottomSheetBenefits';
 import BottomSheetDateRange from './BottomSheetDateRange';
-import type { BenefitKey, BenefitSelections } from './BottomSheetBenefits';
+import type { BenefitSelections } from './BottomSheetBenefits';
 import type { DateRangeOption, CustomDateRange } from './BottomSheetDateRange';
 
 // Chevron Down Icon for select fields

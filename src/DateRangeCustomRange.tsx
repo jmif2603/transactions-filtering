@@ -20,7 +20,7 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const _DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const DateRangeCustomRange = ({
   isVisible,
@@ -109,7 +109,7 @@ const DateRangeCustomRange = ({
   };
 
   // Check if date is in a different month (for grayed out days)
-  const isOutsideMonth = (day: number, month: number, year: number, weekIndex: number) => {
+  const _isOutsideMonth = (day: number, month: number, year: number, _weekIndex: number) => {
     if (day <= 0) return true;
     if (day > getDaysInMonth(year, month)) return true;
     return false;
