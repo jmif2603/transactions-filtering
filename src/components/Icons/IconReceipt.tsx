@@ -3,7 +3,7 @@ interface IconReceiptProps {
   color?: string;
 }
 
-const IconReceipt = ({ size = 24, color = '#60758f' }: IconReceiptProps) => (
+const IconReceipt = ({ size = 24, color = '#0F2B4D' }: IconReceiptProps) => (
   <svg
     width={size}
     height={size}
