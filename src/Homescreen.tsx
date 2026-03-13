@@ -11,8 +11,8 @@ import IconSearch from './components/Icons/IconSearch';
 import SelectedFiltersA from './components/SelectedFiltersA';
 import BenefitIconDuo from './components/BenefitIconDuo';
 import IconReceipt from './components/Icons/IconReceipt';
-import DefaultFilterView from './FilterViewA';
-import type { FilterViewProps } from './FilterViewA';
+import DefaultFilterView, { DEFAULT_BENEFIT_SELECTIONS } from './FilterViewA';
+import type { FilterViewProps, FilterState } from './FilterViewA';
 
 // ============ Sub-components ============
 
@@ -132,7 +132,16 @@ const Homescreen = ({ FilterView = DefaultFilterView }: HomescreenProps) => {
     'wallet' | 'cards' | 'invest' | 'account' | 'claims' | 'resources'
   >('wallet');
   const [showFilterView, setShowFilterView] = useState(false);
-  const [hasActiveFilters, setHasActiveFilters] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<FilterState | null>(null);
+
+  const hasActiveFilters = appliedFilters !== null && (
+    Object.values(appliedFilters.benefitSelections).some(Boolean) ||
+    appliedFilters.moneyInSelected ||
+    appliedFilters.moneyOutSelected ||
+    appliedFilters.clearedSelected ||
+    appliedFilters.pendingSelected ||
+    appliedFilters.dateRangeOption !== null
+  );
 
   // Drag to scroll functionality
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -313,6 +322,33 @@ const Homescreen = ({ FilterView = DefaultFilterView }: HomescreenProps) => {
     },
   ];
 
+  // Filtering
+  const benefitKeyToType: Record<string, string> = {
+    healthSavings: 'HSA_FSA', hra: 'HRA', dcfsa: 'DCFSA', lpfsa: 'LPFSA',
+    remoteWork: 'RemoteWork', transit: 'Transit', lsa: 'LSA', parking: 'Parking', rewards: 'Rewards',
+  };
+  const selectedBenefitTypes = appliedFilters
+    ? Object.entries(appliedFilters.benefitSelections).filter(([, v]) => v).map(([k]) => benefitKeyToType[k])
+    : [];
+  const anyBenefitFilter = selectedBenefitTypes.length > 0;
+  const anyTypeFilter = appliedFilters ? (appliedFilters.moneyInSelected || appliedFilters.moneyOutSelected) : false;
+  const anyStatusFilter = appliedFilters ? (appliedFilters.clearedSelected || appliedFilters.pendingSelected) : false;
+
+  const filterTx = (tx: { benefit?: string; type?: string }) => {
+    if (anyBenefitFilter && !selectedBenefitTypes.includes(tx.benefit ?? '')) return false;
+    if (anyTypeFilter && tx.type !== 'Pending') {
+      if (appliedFilters?.moneyInSelected && tx.type === 'MoneyIn') return true;
+      if (appliedFilters?.moneyOutSelected && tx.type === 'MoneyOut') return true;
+      return false;
+    }
+    return true;
+  };
+
+  const showClearedSection = !anyStatusFilter || (appliedFilters?.clearedSelected ?? false);
+  const showPendingSection = !anyStatusFilter || (appliedFilters?.pendingSelected ?? false);
+  const filteredCleared = clearedTransactions.filter(filterTx);
+  const filteredPending = pendingTransactions.filter(filterTx);
+
   // Show FilterView when state is true
   if (showFilterView) {
     return (
@@ -327,9 +363,10 @@ const Homescreen = ({ FilterView = DefaultFilterView }: HomescreenProps) => {
         }}
       >
         <FilterView
+          initialFilters={appliedFilters ?? undefined}
           onBack={() => setShowFilterView(false)}
-          onApplyFilter={() => {
-            setHasActiveFilters(true);
+          onApplyFilter={(filters) => {
+            setAppliedFilters(filters);
             setShowFilterView(false);
           }}
         />
@@ -486,63 +523,117 @@ const Homescreen = ({ FilterView = DefaultFilterView }: HomescreenProps) => {
           </div>
 
           {/* Active filter chips */}
-          {hasActiveFilters && (
-            <div style={{ marginBottom: 16 }}>
-              <SelectedFiltersA
-                groupLabel="Benefit"
-                selectedValues={['Health Savings']}
-                onClear={() => setHasActiveFilters(false)}
-              />
+          {hasActiveFilters && appliedFilters && (() => {
+            const benefitLabels: Record<string, string> = {
+              healthSavings: 'Health Savings', hra: 'HRA', dcfsa: 'DCFSA',
+              lpfsa: 'LPFSA', remoteWork: 'Remote Work', transit: 'Transit',
+              lsa: 'LSA', parking: 'Parking', rewards: 'Rewards',
+            };
+            const selectedBenefits = Object.entries(appliedFilters.benefitSelections)
+              .filter(([, v]) => v).map(([k]) => benefitLabels[k]);
+            const selectedTypes = [
+              appliedFilters.moneyInSelected && 'Money In',
+              appliedFilters.moneyOutSelected && 'Money Out',
+            ].filter(Boolean) as string[];
+            const selectedStatuses = [
+              appliedFilters.clearedSelected && 'Cleared',
+              appliedFilters.pendingSelected && 'Pending',
+            ].filter(Boolean) as string[];
+            const dateLabels: Record<string, string> = {
+              last24hours: 'Last 24 hours', last3days: 'Last 3 days',
+              last7days: 'Last 7 days', last14days: 'Last 14 days', last30days: 'Last 30 days',
+            };
+            const dateLabel = appliedFilters.dateRangeOption
+              ? (appliedFilters.dateRangeOption === 'custom' && appliedFilters.customDateRange?.startDate && appliedFilters.customDateRange?.endDate
+                ? `${appliedFilters.customDateRange.startDate.toLocaleDateString()} - ${appliedFilters.customDateRange.endDate.toLocaleDateString()}`
+                : dateLabels[appliedFilters.dateRangeOption] ?? null)
+              : null;
+
+            return (
+              <div style={{ marginBottom: 16, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {selectedBenefits.length > 0 && (
+                  <SelectedFiltersA
+                    groupLabel="Benefit"
+                    selectedValues={selectedBenefits}
+                    onClear={() => setAppliedFilters((prev) => prev && { ...prev, benefitSelections: DEFAULT_BENEFIT_SELECTIONS })}
+                  />
+                )}
+                {selectedTypes.length > 0 && (
+                  <SelectedFiltersA
+                    groupLabel="Type"
+                    selectedValues={selectedTypes}
+                    onClear={() => setAppliedFilters((prev) => prev && { ...prev, moneyInSelected: false, moneyOutSelected: false })}
+                  />
+                )}
+                {selectedStatuses.length > 0 && (
+                  <SelectedFiltersA
+                    groupLabel="Status"
+                    selectedValues={selectedStatuses}
+                    onClear={() => setAppliedFilters((prev) => prev && { ...prev, clearedSelected: false, pendingSelected: false })}
+                  />
+                )}
+                {dateLabel && (
+                  <SelectedFiltersA
+                    groupLabel="Date"
+                    selectedValues={[dateLabel]}
+                    onClear={() => setAppliedFilters((prev) => prev && { ...prev, dateRangeOption: null, customDateRange: undefined })}
+                  />
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Cleared */}
+          {showClearedSection && filteredCleared.length > 0 && (
+            <div style={{ marginBottom: 24 }}>
+              <p
+                style={{
+                  fontFamily: 'Roboto, sans-serif',
+                  fontSize: 10,
+                  fontWeight: 500,
+                  color: '#60758f',
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.8,
+                  margin: '0 0 8px 0',
+                }}
+              >
+                Cleared
+              </p>
+              {filteredCleared.map((tx, i) => (
+                <WalletTransactionListItem
+                  key={i}
+                  {...tx}
+                  hasBottomDivider={i < filteredCleared.length - 1}
+                />
+              ))}
             </div>
           )}
 
-          {/* Cleared */}
-          <div style={{ marginBottom: 24 }}>
-            <p
-              style={{
-                fontFamily: 'Roboto, sans-serif',
-                fontSize: 10,
-                fontWeight: 500,
-                color: '#60758f',
-                textTransform: 'uppercase',
-                letterSpacing: 0.8,
-                margin: '0 0 8px 0',
-              }}
-            >
-              Cleared
-            </p>
-            {clearedTransactions.map((tx, i) => (
-              <WalletTransactionListItem
-                key={i}
-                {...tx}
-                hasBottomDivider={i < clearedTransactions.length - 1}
-              />
-            ))}
-          </div>
-
           {/* Pending */}
-          <div>
-            <p
-              style={{
-                fontFamily: 'Roboto, sans-serif',
-                fontSize: 10,
-                fontWeight: 500,
-                color: '#60758f',
-                textTransform: 'uppercase',
-                letterSpacing: 0.8,
-                margin: '0 0 8px 0',
-              }}
-            >
-              Pending
-            </p>
-            {pendingTransactions.map((tx, i) => (
-              <WalletTransactionListItem
-                key={i}
-                {...tx}
-                hasBottomDivider={i < pendingTransactions.length - 1}
-              />
-            ))}
-          </div>
+          {showPendingSection && filteredPending.length > 0 && (
+            <div>
+              <p
+                style={{
+                  fontFamily: 'Roboto, sans-serif',
+                  fontSize: 10,
+                  fontWeight: 500,
+                  color: '#60758f',
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.8,
+                  margin: '0 0 8px 0',
+                }}
+              >
+                Pending
+              </p>
+              {filteredPending.map((tx, i) => (
+                <WalletTransactionListItem
+                  key={i}
+                  {...tx}
+                  hasBottomDivider={i < filteredPending.length - 1}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

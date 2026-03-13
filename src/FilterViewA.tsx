@@ -34,7 +34,7 @@ export interface FilterViewProps {
   initialFilters?: Partial<FilterState>;
 }
 
-const DEFAULT_BENEFIT_SELECTIONS: BenefitSelections = {
+export const DEFAULT_BENEFIT_SELECTIONS: BenefitSelections = {
   healthSavings: false,
   hra: false,
   dcfsa: false,
