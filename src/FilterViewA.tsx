@@ -103,7 +103,7 @@ export default function FilterView({
     if (selected.length <= 2) {
       return selected.join(', ');
     }
-    return `${selected.length} selected`;
+    return `${selected.slice(0, 2).join(', ')}, +${selected.length - 2}`;
   };
 
   // Derive date range display value
@@ -134,30 +134,24 @@ export default function FilterView({
 
   // Derive type display value
   const getTypeDisplayValue = () => {
-    if (filters.moneyInSelected && filters.moneyOutSelected) {
-      return 'Money In, Money Out';
-    }
-    if (filters.moneyInSelected) {
-      return 'Money In';
-    }
-    if (filters.moneyOutSelected) {
-      return 'Money Out';
-    }
-    return 'All Types';
+    const selected = [
+      filters.moneyInSelected && 'Money In',
+      filters.moneyOutSelected && 'Money Out',
+    ].filter(Boolean) as string[];
+    if (selected.length === 0) return 'All Types';
+    if (selected.length <= 2) return selected.join(', ');
+    return `${selected.slice(0, 2).join(', ')}, +${selected.length - 2}`;
   };
 
   // Derive status display value
   const getStatusDisplayValue = () => {
-    if (filters.clearedSelected && filters.pendingSelected) {
-      return 'Cleared, Pending';
-    }
-    if (filters.clearedSelected) {
-      return 'Cleared';
-    }
-    if (filters.pendingSelected) {
-      return 'Pending';
-    }
-    return 'All Status';
+    const selected = [
+      filters.clearedSelected && 'Cleared',
+      filters.pendingSelected && 'Pending',
+    ].filter(Boolean) as string[];
+    if (selected.length === 0) return 'All Status';
+    if (selected.length <= 2) return selected.join(', ');
+    return `${selected.slice(0, 2).join(', ')}, +${selected.length - 2}`;
   };
 
   const handleApplyFilter = () => {

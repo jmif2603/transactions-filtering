@@ -480,30 +480,7 @@ const Homescreen = ({ FilterView = DefaultFilterView }: HomescreenProps) => {
                   height: 40,
                 }}
               >
-                <IconFilter size={24} color="#0f2b4d" />
-                {hasActiveFilters && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '30%',
-                      right: '30.39%',
-                      bottom: '31.55%',
-                      left: '30.39%',
-                    }}
-                  >
-                    <img
-                      src="http://localhost:3845/assets/af64d688f25af5510967eeaf0e4d290f9643880d.svg"
-                      alt=""
-                      style={{
-                        position: 'absolute',
-                        display: 'block',
-                        width: '100%',
-                        height: '100%',
-                        maxWidth: 'none',
-                      }}
-                    />
-                  </div>
-                )}
+                <IconFilter size={24} selected={hasActiveFilters} />
               </button>
             </div>
           </div>
