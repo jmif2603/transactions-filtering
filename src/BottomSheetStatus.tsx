@@ -1,4 +1,5 @@
 import CheckboxWithLabel from './components/CheckboxWithLabel';
+import ButtonBar from './components/ButtonBar';
 
 export interface BottomSheetStatusProps {
   /** Whether "Cleared" is selected */
@@ -13,6 +14,8 @@ export interface BottomSheetStatusProps {
   onClearSelection?: () => void;
   /** Callback when overlay is pressed (to close) */
   onOverlayPress?: () => void;
+  /** Callback when Save button is pressed */
+  onSave?: () => void;
 }
 
 const BottomSheetStatus = ({
@@ -22,6 +25,7 @@ const BottomSheetStatus = ({
   onPendingChange,
   onClearSelection: _onClearSelection,
   onOverlayPress,
+  onSave,
 }: BottomSheetStatusProps) => {
   return (
     <div
@@ -51,8 +55,10 @@ const BottomSheetStatus = ({
 
       {/* Bottom sheet */}
       <div
+        onClick={(e) => e.stopPropagation()}
         style={{
           position: 'relative',
+          zIndex: 1,
           display: 'flex',
           flexDirection: 'column',
           gap: 8,
@@ -98,10 +104,9 @@ const BottomSheetStatus = ({
             gap: 8,
             alignItems: 'flex-start',
             width: '100%',
-            padding: '0 16px 48px 16px',
+            padding: '0 16px',
           }}
         >
-          {/* Checkbox Options */}
           <CheckboxWithLabel
             label="Cleared"
             checked={clearedSelected}
@@ -114,30 +119,11 @@ const BottomSheetStatus = ({
           />
         </div>
 
-        {/* Home Indicator */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-            height: 34,
-            backgroundColor: 'white',
-          }}
-        >
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 8,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: 134,
-              height: 5,
-              backgroundColor: 'black',
-              borderRadius: 100,
-            }}
-          />
-        </div>
+        <ButtonBar
+          buttonCount={1}
+          primaryLabel="Save"
+          onPrimaryClick={onSave}
+        />
       </div>
     </div>
   );

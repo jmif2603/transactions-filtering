@@ -295,6 +295,7 @@ export default function FilterView({
 
   const [showCustomRangeSheet, setShowCustomRangeSheet] = useState(false);
   const [showBenefitSheet, setShowBenefitSheet] = useState(false);
+  const [pendingBenefitSelections, setPendingBenefitSelections] = useState<BenefitSelections>(DEFAULT_BENEFIT_SELECTIONS);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -380,7 +381,10 @@ export default function FilterView({
             <SectionHeader
               label="Benefit"
               expanded={expanded.benefit}
-              onToggle={() => setShowBenefitSheet(true)}
+              onToggle={() => {
+                setPendingBenefitSelections(filters.benefitSelections);
+                setShowBenefitSheet(true);
+              }}
               onClear={() =>
                 setFilters((prev) => ({ ...prev, benefitSelections: DEFAULT_BENEFIT_SELECTIONS }))
               }
@@ -530,15 +534,15 @@ export default function FilterView({
       {showBenefitSheet && (
         <div style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
           <BottomSheetBenefits
-            selections={filters.benefitSelections}
+            selections={pendingBenefitSelections}
             onSelectionChange={(key, checked) =>
-              setFilters((prev) => ({
-                ...prev,
-                benefitSelections: { ...prev.benefitSelections, [key]: checked },
-              }))
+              setPendingBenefitSelections((prev) => ({ ...prev, [key]: checked }))
             }
             onOverlayPress={() => setShowBenefitSheet(false)}
-            onSave={() => setShowBenefitSheet(false)}
+            onSave={() => {
+              setFilters((prev) => ({ ...prev, benefitSelections: pendingBenefitSelections }));
+              setShowBenefitSheet(false);
+            }}
           />
         </div>
       )}

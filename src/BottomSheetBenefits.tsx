@@ -1,5 +1,4 @@
 import CheckboxWithLabel from './components/CheckboxWithLabel';
-import ButtonBar from './components/ButtonBar';
 
 export type BenefitKey =
   | 'healthSavings'
@@ -96,6 +95,7 @@ const BottomSheetBenefits = ({
 
       {/* Bottom sheet */}
       <div
+        onClick={(e) => e.stopPropagation()}
         style={{
           position: 'relative',
           zIndex: 1,
@@ -158,11 +158,58 @@ const BottomSheetBenefits = ({
           ))}
         </div>
 
-        <ButtonBar
-          buttonCount={1}
-          primaryLabel="Save"
-          onPrimaryClick={onSave}
-        />
+        {/* Save button bar */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            width: '100%',
+            backgroundColor: 'white',
+          }}
+        >
+          <div style={{ padding: '16px 16px 6px' }}>
+            <button
+              type="button"
+              onClick={onSave}
+              style={{
+                width: '100%',
+                padding: '12px 24px',
+                backgroundColor: '#1d7883',
+                border: '2px solid #1d7883',
+                borderRadius: 6,
+                color: 'white',
+                fontFamily: 'Roboto, sans-serif',
+                fontSize: 15,
+                fontWeight: 400,
+                lineHeight: '21px',
+                letterSpacing: '-0.15px',
+                cursor: 'pointer',
+              }}
+            >
+              Save
+            </button>
+          </div>
+          {/* iOS home indicator */}
+          <div
+            style={{
+              height: 34,
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              paddingBottom: 8,
+            }}
+          >
+            <div
+              style={{
+                width: 134,
+                height: 5,
+                backgroundColor: 'black',
+                borderRadius: 100,
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

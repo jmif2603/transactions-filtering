@@ -419,6 +419,7 @@ export default function FilterView({
             }))
           }
           onOverlayPress={() => setShowStatusSheet(false)}
+          onSave={() => setShowStatusSheet(false)}
         />
         </div>
       )}
@@ -443,6 +444,7 @@ export default function FilterView({
             }))
           }
           onOverlayPress={() => setShowTypeSheet(false)}
+          onSave={() => setShowTypeSheet(false)}
         />
         </div>
       )}
@@ -468,6 +470,7 @@ export default function FilterView({
             }))
           }
           onOverlayPress={() => setShowBenefitSheet(false)}
+          onSave={() => setShowBenefitSheet(false)}
         />
         </div>
       )}
