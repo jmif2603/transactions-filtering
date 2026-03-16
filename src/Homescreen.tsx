@@ -495,35 +495,9 @@ const Homescreen = ({ FilterView = DefaultFilterView, filterChipVariant = 'A' }:
             </div>
           )}
 
-          {/* Cleared */}
-          {showClearedSection && filteredCleared.length > 0 && (
-            <div style={{ marginBottom: 24 }}>
-              <p
-                style={{
-                  fontFamily: 'Roboto, sans-serif',
-                  fontSize: 10,
-                  fontWeight: 500,
-                  color: '#60758f',
-                  textTransform: 'uppercase',
-                  letterSpacing: 0.8,
-                  margin: '0 0 8px 0',
-                }}
-              >
-                Cleared
-              </p>
-              {filteredCleared.map((tx, i) => (
-                <WalletTransactionListItem
-                  key={i}
-                  {...tx}
-                  hasBottomDivider={i < filteredCleared.length - 1}
-                />
-              ))}
-            </div>
-          )}
-
           {/* Pending */}
           {showPendingSection && filteredPending.length > 0 && (
-            <div>
+            <div style={{ marginBottom: 24 }}>
               <p
                 style={{
                   fontFamily: 'Roboto, sans-serif',
@@ -542,6 +516,32 @@ const Homescreen = ({ FilterView = DefaultFilterView, filterChipVariant = 'A' }:
                   key={i}
                   {...tx}
                   hasBottomDivider={i < filteredPending.length - 1}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Cleared */}
+          {showClearedSection && filteredCleared.length > 0 && (
+            <div>
+              <p
+                style={{
+                  fontFamily: 'Roboto, sans-serif',
+                  fontSize: 10,
+                  fontWeight: 500,
+                  color: '#60758f',
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.8,
+                  margin: '0 0 8px 0',
+                }}
+              >
+                Cleared
+              </p>
+              {filteredCleared.map((tx, i) => (
+                <WalletTransactionListItem
+                  key={i}
+                  {...tx}
+                  hasBottomDivider={i < filteredCleared.length - 1}
                 />
               ))}
             </div>
