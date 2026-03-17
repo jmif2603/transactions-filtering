@@ -5,6 +5,14 @@ import creditCardSvg from '../assets/icon-credit-card.svg';
 import receiptSmallSvg from '../assets/icon-receipt.svg';
 import investSvg from '../assets/icon-invest.svg';
 import walletSvg from '../assets/icon-wallet.svg';
+import homeSvg from '../assets/icon-home.svg';
+import usersSvg from '../assets/icon-users.svg';
+import benefitsSvg from '../assets/icon-benefits.svg';
+import reportsSvg from '../assets/icon-reports.svg';
+import settingsSvg from '../assets/icon-settings.svg';
+import organizationsSvg from '../assets/icon-organizations.svg';
+import bankingSvg from '../assets/icon-banking.svg';
+import identitySvg from '../assets/icon-identity.svg';
 
 // ============ Shared prop types ============
 
@@ -172,6 +180,42 @@ export const IconInvest = ({ size = 24 }: IconAssetProps) => (
 
 export const IconWallet = ({ size = 24 }: IconAssetProps) => (
   <img src={walletSvg} width={size} height={size} alt="wallet" />
+);
+
+export const IconMembers = ({ size = 16 }: IconAssetProps) => (
+  <img src={usersSvg} width={size} height={size} alt="members" />
+);
+
+export const IconBenefits = ({ size = 16 }: IconAssetProps) => (
+  <img src={benefitsSvg} width={size} height={size} alt="benefits" />
+);
+
+export const IconReports = ({ size = 16 }: IconAssetProps) => (
+  <img src={reportsSvg} width={size} height={size} alt="reports" />
+);
+
+export const IconSettings = ({ size = 16 }: IconAssetProps) => (
+  <img src={settingsSvg} width={size} height={size} alt="settings" />
+);
+
+export const IconOrganizations = ({ size = 16 }: IconAssetProps) => (
+  <img src={organizationsSvg} width={size} height={size} alt="organizations" />
+);
+
+export const IconBanking = ({ size = 16 }: IconAssetProps) => (
+  <img src={bankingSvg} width={size} height={size} alt="banking" />
+);
+
+export const IconIdentity = ({ size = 16 }: IconAssetProps) => (
+  <img src={identitySvg} width={size} height={size} alt="identity" />
+);
+
+export const IconBenefitBuilder = ({ size = 16 }: IconAssetProps) => (
+  <img src={benefitsSvg} width={size} height={size} alt="benefit builder" />
+);
+
+export const IconHome = ({ size = 16 }: IconAssetProps) => (
+  <img src={homeSvg} width={size} height={size} alt="home" />
 );
 
 interface IconFilterProps extends IconProps {
