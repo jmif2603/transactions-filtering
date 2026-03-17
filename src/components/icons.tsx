@@ -1,8 +1,20 @@
+import bellSvg from '../assets/icon-bell.svg';
+import helpCircleSvg from '../assets/icon-help-circle.svg';
+import userSvg from '../assets/icon-user.svg';
+import creditCardSvg from '../assets/icon-credit-card.svg';
+import receiptSmallSvg from '../assets/icon-receipt.svg';
+import investSvg from '../assets/icon-invest.svg';
+import walletSvg from '../assets/icon-wallet.svg';
+
 // ============ Shared prop types ============
 
 interface IconProps {
   size?: number;
   color?: string;
+}
+
+interface IconAssetProps {
+  size?: number;
 }
 
 // ============ Icons ============
@@ -115,6 +127,51 @@ export const IconReceipt = ({ size = 24, color = '#0F2B4D' }: IconProps) => (
     <path d="M15 5C15.5523 5 16 5.44772 16 6C16 6.55228 15.5523 7 15 7H5C4.44772 7 4 6.55228 4 6C4 5.44772 4.44772 5 5 5H15Z" fill={color} />
     <path d="M15 10C15.5523 10 16 10.4477 16 11C16 11.5523 15.5523 12 15 12H5C4.44772 12 4 11.5523 4 11C4 10.4477 4.44772 10 5 10H15Z" fill={color} />
   </svg>
+);
+
+export const IconChevronRight = ({ size = 16, color = '#0f2b4d' }: IconProps) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke={color}
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M6 4l4 4-4 4" />
+  </svg>
+);
+
+// ============ Asset-based icons (SVG files from ./src/assets) ============
+
+export const IconBell = ({ size = 16 }: IconAssetProps) => (
+  <img src={bellSvg} width={size} height={size} alt="bell" />
+);
+
+export const IconHelpCircle = ({ size = 24 }: IconAssetProps) => (
+  <img src={helpCircleSvg} width={size} height={size} alt="help circle" />
+);
+
+export const IconUser = ({ size = 16 }: IconAssetProps) => (
+  <img src={userSvg} width={size} height={size} alt="user" />
+);
+
+export const IconCreditCard = ({ size = 16 }: IconAssetProps) => (
+  <img src={creditCardSvg} width={size} height={size} alt="credit card" />
+);
+
+export const IconReceiptSmall = ({ size = 16 }: IconAssetProps) => (
+  <img src={receiptSmallSvg} width={size} height={size} alt="receipt" />
+);
+
+export const IconInvest = ({ size = 24 }: IconAssetProps) => (
+  <img src={investSvg} width={size} height={size} alt="invest" />
+);
+
+export const IconWallet = ({ size = 24 }: IconAssetProps) => (
+  <img src={walletSvg} width={size} height={size} alt="wallet" />
 );
 
 interface IconFilterProps extends IconProps {
