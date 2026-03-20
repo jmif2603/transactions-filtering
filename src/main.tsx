@@ -5,61 +5,128 @@ import Homescreen from './Homescreen.tsx'
 import FilterViewA from './FilterViewA.tsx'
 import FilterViewB from './FilterViewB.tsx'
 import HomescreenWeb from './HomescreenWeb.tsx'
+import HomescreenWebUnified from './HomescreenWebUnified.tsx'
 
-type View = 'mobile-a' | 'mobile-b' | 'web';
+type View = 'mobile-a' | 'mobile-b' | 'web-separated' | 'web-unified';
 
-const radioOptions: { value: View; label: string }[] = [
-  { value: 'mobile-a', label: 'Home screen mobile + bottom sheet Transactions filtering' },
-  { value: 'mobile-b', label: 'Home screen mobile + single-view Transactions filtering' },
-  { value: 'web', label: 'Home screen web' },
-];
+const labelStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  cursor: 'pointer',
+  fontFamily: 'Roboto, sans-serif',
+  fontSize: 14,
+  color: '#0f2b4d',
+  userSelect: 'none',
+};
+
+const childLabelStyle: React.CSSProperties = {
+  ...labelStyle,
+  fontSize: 13,
+  color: '#60758f',
+};
 
 const App = () => {
   const [view, setView] = useState<View>('mobile-a');
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+  const isMobile = view === 'mobile-a' || view === 'mobile-b';
+  const isWeb = view === 'web-separated' || view === 'web-unified';
 
-      {/* Radio group bar */}
+  return (
+    <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
+
+      {/* Left sidebar */}
       <div
         style={{
           flexShrink: 0,
+          width: 180,
           display: 'flex',
-          gap: 24,
-          padding: '14px 24px',
-          borderBottom: '1px solid #cfd6de',
+          flexDirection: 'column',
+          gap: 16,
+          padding: '24px 16px',
+          borderRight: '1px solid #cfd6de',
           backgroundColor: 'white',
         }}
       >
-        {radioOptions.map(opt => (
-          <label
-            key={opt.value}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              cursor: 'pointer',
-              fontFamily: 'Roboto, sans-serif',
-              fontSize: 14,
-              color: '#0f2b4d',
-              userSelect: 'none',
-            }}
-          >
+        {/* Mobile view group */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <label style={labelStyle}>
             <input
               type="radio"
-              name="view"
-              value={opt.value}
-              checked={view === opt.value}
-              onChange={() => setView(opt.value)}
+              name="view-group"
+              checked={isMobile}
+              onChange={() => setView('mobile-a')}
               style={{ accentColor: '#1d7883', cursor: 'pointer' }}
             />
-            {opt.label}
+            Mobile view
           </label>
-        ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingLeft: 20 }}>
+              <label style={childLabelStyle}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="mobile-a"
+                  checked={view === 'mobile-a'}
+                  onChange={() => setView('mobile-a')}
+                  style={{ accentColor: '#1d7883', cursor: 'pointer' }}
+                />
+                Filter groups as separate bottom sheets
+              </label>
+              <label style={childLabelStyle}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="mobile-b"
+                  checked={view === 'mobile-b'}
+                  onChange={() => setView('mobile-b')}
+                  style={{ accentColor: '#1d7883', cursor: 'pointer' }}
+                />
+                Filter groups as checkbox groups
+              </label>
+            </div>
+        </div>
+
+        {/* Web group */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <label style={labelStyle}>
+            <input
+              type="radio"
+              name="view-group"
+              checked={isWeb}
+              onChange={() => setView('web-separated')}
+              style={{ accentColor: '#1d7883', cursor: 'pointer' }}
+            />
+            Web view
+          </label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingLeft: 20 }}>
+              <label style={childLabelStyle}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="web-separated"
+                  checked={view === 'web-separated'}
+                  onChange={() => setView('web-separated')}
+                  style={{ accentColor: '#1d7883', cursor: 'pointer' }}
+                />
+                All filter fields separated
+              </label>
+              <label style={childLabelStyle}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="web-unified"
+                  checked={view === 'web-unified'}
+                  onChange={() => setView('web-unified')}
+                  style={{ accentColor: '#1d7883', cursor: 'pointer' }}
+                />
+                Unified filter panel
+              </label>
+            </div>
+        </div>
       </div>
 
       {/* Content area */}
-      <div style={{ flex: 1, overflow: view === 'web' ? 'hidden' : 'auto' }}>
+      <div style={{ flex: 1, overflow: isWeb ? 'hidden' : 'auto' }}>
 
         {view === 'mobile-a' && (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '32px 24px' }}>
@@ -87,9 +154,15 @@ const App = () => {
           </div>
         )}
 
-        {view === 'web' && (
+        {view === 'web-separated' && (
           <div style={{ height: '100%' }}>
             <HomescreenWeb />
+          </div>
+        )}
+
+        {view === 'web-unified' && (
+          <div style={{ height: '100%' }}>
+            <HomescreenWebUnified />
           </div>
         )}
 
