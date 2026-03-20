@@ -15,6 +15,18 @@ interface DateRangeCustomRangeProps {
   onDismiss?: () => void;
   /** Callback when Save button is pressed */
   onSave?: () => void;
+  /** Hide the semi-transparent overlay behind the sheet */
+  hideOverlay?: boolean;
+  /** Make the sheet fill the full height of its container */
+  fullHeight?: boolean;
+  /** Hide the drag handle */
+  hideDragHandle?: boolean;
+  /** Extra padding-top above the Select Period header */
+  headerPaddingTop?: number;
+  /** Replace the ButtonBar with a simple full-width Save button (no iOS indicator) */
+  simpleButton?: boolean;
+  /** Disable the auto-scroll to current month on open */
+  disableAutoScroll?: boolean;
 }
 
 const MONTHS = [
@@ -29,6 +41,12 @@ const DateRangeCustomRange = ({
   onSelectDates,
   onDismiss,
   onSave,
+  hideOverlay = false,
+  fullHeight = false,
+  hideDragHandle = false,
+  headerPaddingTop = 0,
+  simpleButton = false,
+  disableAutoScroll = false,
 }: DateRangeCustomRangeProps) => {
   const [startDate, setStartDate] = useState<Date | null>(initialStartDate);
   const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
@@ -41,10 +59,18 @@ const DateRangeCustomRange = ({
   const [scrollTop, setScrollTop] = useState(0);
 
   useEffect(() => {
-    if (isVisible && currentMonthRef.current) {
-      currentMonthRef.current.scrollIntoView({ block: 'start', behavior: 'instant' });
+    if (!isVisible) return;
+    if (disableAutoScroll) {
+      // Scroll the internal container to the current month without affecting the page
+      if (scrollRef.current && currentMonthRef.current) {
+        scrollRef.current.scrollTop = currentMonthRef.current.offsetTop;
+      }
+    } else {
+      if (currentMonthRef.current) {
+        currentMonthRef.current.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
     }
-  }, [isVisible]);
+  }, [isVisible, disableAutoScroll]);
 
   if (!isVisible) return null;
 
@@ -288,18 +314,20 @@ const DateRangeCustomRange = ({
       }}
     >
       {/* Semi-transparent overlay */}
-      <div
-        onClick={onDismiss}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          cursor: 'pointer',
-        }}
-      />
+      {!hideOverlay && (
+        <div
+          onClick={onDismiss}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            cursor: 'pointer',
+          }}
+        />
+      )}
 
       {/* Bottom sheet */}
       <div
@@ -309,7 +337,7 @@ const DateRangeCustomRange = ({
           flexDirection: 'column',
           width: '100%',
           maxWidth: 393,
-          height: '81%',
+          height: fullHeight ? '100%' : '81%',
           backgroundColor: colors.white,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
@@ -317,12 +345,14 @@ const DateRangeCustomRange = ({
         }}
       >
         {/* Drag Handle */}
-        <div onClick={onDismiss} style={{ cursor: 'pointer' }}>
-          <DragHandle />
-        </div>
+        {!hideDragHandle && (
+          <div onClick={onDismiss} style={{ cursor: 'pointer' }}>
+            <DragHandle />
+          </div>
+        )}
 
         {/* Select Period Header */}
-        <div style={{ padding: '0 24px', marginBottom: 24 }}>
+        <div style={{ padding: '0 24px', marginBottom: 24, paddingTop: headerPaddingTop }}>
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -401,16 +431,8 @@ const DateRangeCustomRange = ({
         </div>
 
         {/* Save button bar */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-            width: '100%',
-            backgroundColor: colors.white,
-          }}
-        >
-          <div style={{ padding: '16px 16px 6px' }}>
+        {simpleButton ? (
+          <div style={{ padding: '16px 16px 16px' }}>
             <button
               type="button"
               onClick={onSave}
@@ -432,26 +454,59 @@ const DateRangeCustomRange = ({
               Save
             </button>
           </div>
-          {/* iOS home indicator */}
+        ) : (
           <div
             style={{
-              height: 34,
               display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingBottom: 8,
+              flexDirection: 'column',
+              alignItems: 'stretch',
+              width: '100%',
+              backgroundColor: colors.white,
             }}
           >
+            <div style={{ padding: '16px 16px 6px' }}>
+              <button
+                type="button"
+                onClick={onSave}
+                style={{
+                  width: '100%',
+                  padding: '12px 24px',
+                  backgroundColor: colors.primary,
+                  border: `2px solid ${colors.primary}`,
+                  borderRadius: 6,
+                  color: colors.white,
+                  fontFamily: 'Roboto, sans-serif',
+                  fontSize: 15,
+                  fontWeight: 400,
+                  lineHeight: '21px',
+                  letterSpacing: '-0.15px',
+                  cursor: 'pointer',
+                }}
+              >
+                Save
+              </button>
+            </div>
+            {/* iOS home indicator */}
             <div
               style={{
-                width: 134,
-                height: 5,
-                backgroundColor: 'black',
-                borderRadius: 100,
+                height: 34,
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                paddingBottom: 8,
               }}
-            />
+            >
+              <div
+                style={{
+                  width: 134,
+                  height: 5,
+                  backgroundColor: 'black',
+                  borderRadius: 100,
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

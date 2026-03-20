@@ -218,6 +218,19 @@ export const IconHome = ({ size = 16 }: IconAssetProps) => (
   <img src={homeSvg} width={size} height={size} alt="home" />
 );
 
+export const IconCalendar = ({ size = 16, color = '#60758f' }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1.5" y="2.5" width="13" height="12" rx="1.5" stroke={color} strokeWidth="1.2" />
+    <path d="M1.5 6h13" stroke={color} strokeWidth="1.2" />
+    <path d="M5 1v3M11 1v3" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+    <rect x="4" y="8.5" width="2" height="2" rx="0.5" fill={color} />
+    <rect x="7" y="8.5" width="2" height="2" rx="0.5" fill={color} />
+    <rect x="10" y="8.5" width="2" height="2" rx="0.5" fill={color} />
+    <rect x="4" y="11.5" width="2" height="2" rx="0.5" fill={color} />
+    <rect x="7" y="11.5" width="2" height="2" rx="0.5" fill={color} />
+  </svg>
+);
+
 interface IconFilterProps extends IconProps {
   selected?: boolean;
 }

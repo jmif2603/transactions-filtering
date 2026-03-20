@@ -155,14 +155,24 @@ const App = () => {
         )}
 
         {view === 'web-separated' && (
-          <div style={{ height: '100%' }}>
-            <HomescreenWeb />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, paddingTop: 32, height: '100%', boxSizing: 'border-box' }}>
+            <span style={{ fontFamily: 'Roboto, sans-serif', fontSize: 14, fontWeight: 500, color: '#60758f', flexShrink: 0 }}>
+              Homescreen C
+            </span>
+            <div style={{ flex: 1, width: '100%', overflow: 'hidden' }}>
+              <HomescreenWeb />
+            </div>
           </div>
         )}
 
         {view === 'web-unified' && (
-          <div style={{ height: '100%' }}>
-            <HomescreenWebUnified />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, paddingTop: 32, height: '100%', boxSizing: 'border-box' }}>
+            <span style={{ fontFamily: 'Roboto, sans-serif', fontSize: 14, fontWeight: 500, color: '#60758f', flexShrink: 0 }}>
+              Homescreen D
+            </span>
+            <div style={{ flex: 1, width: '100%', overflow: 'hidden' }}>
+              <HomescreenWebUnified />
+            </div>
           </div>
         )}
 
