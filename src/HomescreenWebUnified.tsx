@@ -25,11 +25,6 @@ const colors = {
 
 // ============ Local helpers ============
 
-const ChevronDown = () => (
-  <svg width={16} height={16} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 6l4 4 4-4" />
-  </svg>
-);
 
 const HealthWalletLogo = () => (
   <img src={healthWalletLogoSvg} alt="Health Wallet" style={{ height: 35, width: 'auto' }} />
@@ -222,11 +217,22 @@ interface FilterSectionProps {
   selected: string[];
   onToggle: (option: string) => void;
   onSelectAll: () => void;
+  onClearAll: () => void;
   icons?: Record<string, React.ReactNode>;
   borderBottom?: boolean;
 }
 
-const FilterSection = ({ title, options, selected, onToggle, onSelectAll, icons, borderBottom = true }: FilterSectionProps) => (
+const filterActionBtnStyle: React.CSSProperties = {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontFamily: 'Roboto, sans-serif',
+  fontSize: 13,
+  color: colors.primary,
+  padding: '4px 12px',
+};
+
+const FilterSection = ({ title, options, selected, onToggle, onSelectAll, onClearAll, icons, borderBottom = true }: FilterSectionProps) => (
   <div
     style={{
       display: 'flex',
@@ -237,24 +243,19 @@ const FilterSection = ({ title, options, selected, onToggle, onSelectAll, icons,
     }}
   >
     {/* Section header */}
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingLeft: 8, paddingRight: 8 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingLeft: 8 }}>
       <span style={{ fontFamily: 'Roboto, sans-serif', fontSize: 15, fontWeight: 500, color: colors.textDark, letterSpacing: '-0.15px' }}>
         {title}
       </span>
-      <button
-        onClick={onSelectAll}
-        style={{
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          fontFamily: 'Roboto, sans-serif',
-          fontSize: 13,
-          color: colors.primary,
-          padding: '4px 12px',
-        }}
-      >
-        Select All
-      </button>
+      <div style={{ display: 'flex', alignItems: 'stretch' }}>
+        <button onClick={onSelectAll} style={filterActionBtnStyle}>Select All</button>
+        {selected.length > 0 && (
+          <>
+            <div style={{ width: 0.5, backgroundColor: colors.borderDark, alignSelf: 'stretch' }} />
+            <button onClick={onClearAll} style={filterActionBtnStyle}>Clear All</button>
+          </>
+        )}
+      </div>
     </div>
 
     {/* Chips */}
@@ -318,6 +319,7 @@ const FilterPanel = ({
         selected={selectedBenefits}
         onToggle={opt => toggle(selectedBenefits, opt, setSelectedBenefits)}
         onSelectAll={() => setSelectedBenefits(selectedBenefits.length === BENEFIT_OPTIONS.length ? [] : [...BENEFIT_OPTIONS])}
+        onClearAll={() => setSelectedBenefits([])}
       />
       <FilterSection
         title="Type"
@@ -325,6 +327,7 @@ const FilterPanel = ({
         selected={selectedTypes}
         onToggle={opt => toggle(selectedTypes, opt, setSelectedTypes)}
         onSelectAll={() => setSelectedTypes(selectedTypes.length === TYPE_OPTIONS.length ? [] : [...TYPE_OPTIONS])}
+        onClearAll={() => setSelectedTypes([])}
         icons={typeIcons}
       />
       <FilterSection
@@ -333,6 +336,7 @@ const FilterPanel = ({
         selected={selectedStatuses}
         onToggle={opt => toggle(selectedStatuses, opt, setSelectedStatuses)}
         onSelectAll={() => setSelectedStatuses(selectedStatuses.length === STATUS_OPTIONS.length ? [] : [...STATUS_OPTIONS])}
+        onClearAll={() => setSelectedStatuses([])}
         icons={statusIcons}
       />
 
