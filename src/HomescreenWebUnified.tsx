@@ -537,26 +537,86 @@ const HomescreenWebUnified = ({ userName = 'Frank' }: HomescreenWebUnifiedProps)
               Transactions
             </h2>
             <div ref={filterRef} style={{ position: 'relative' }}>
-              <button
-                onClick={() => setFilterPanelOpen(o => !o)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  backgroundColor: colors.white,
-                  border: `1px solid ${colors.borderDark}`,
-                  borderRadius: 6,
-                  padding: '8px 12px',
-                  cursor: 'pointer',
-                  fontFamily: 'Roboto, sans-serif',
-                  fontSize: 15,
-                  color: colors.textDark,
-                  letterSpacing: '-0.15px',
-                }}
-              >
-                Filters
-                <IconFilter size={16} color={colors.textDark} />
-              </button>
+              {(() => {
+                const totalSelected =
+                  selectedBenefits.length +
+                  selectedTypes.length +
+                  selectedStatuses.length +
+                  (selectedDateRange ? 1 : 0);
+                const clearAll = () => {
+                  setSelectedBenefits([]);
+                  setSelectedTypes([]);
+                  setSelectedStatuses([]);
+                  setSelectedDateRange(null);
+                };
+                return (
+                  <button
+                    onClick={() => setFilterPanelOpen(o => !o)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      backgroundColor: colors.white,
+                      border: `1px solid ${colors.borderDark}`,
+                      borderRadius: 6,
+                      paddingTop: 8,
+                      paddingBottom: 8,
+                      paddingLeft: 12,
+                      paddingRight: totalSelected > 0 ? 8 : 12,
+                      cursor: 'pointer',
+                      fontFamily: 'Roboto, sans-serif',
+                      fontSize: 15,
+                      color: colors.textDark,
+                      letterSpacing: '-0.15px',
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      Filters
+                      {totalSelected > 0 && (
+                        <span style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 20,
+                          height: 20,
+                          borderRadius: 12,
+                          backgroundColor: colors.primary,
+                          color: 'white',
+                          fontSize: 15,
+                          fontFamily: 'Roboto, sans-serif',
+                          lineHeight: '120%',
+                          flexShrink: 0,
+                        }}>
+                          {totalSelected}
+                        </span>
+                      )}
+                    </span>
+                    {totalSelected > 0 ? (
+                      <span
+                        onClick={e => { e.stopPropagation(); clearAll(); }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 24,
+                          height: 24,
+                          cursor: 'pointer',
+                          flexShrink: 0,
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 4L4 12M4 4L12 12" stroke="#60758f" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    ) : (
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, flexShrink: 0 }}>
+                        <IconFilter size={16} color={colors.textDark} />
+                      </span>
+                    )}
+                  </button>
+                );
+              })()}
+
               {filterPanelOpen && (
                 <FilterPanel
                   selectedBenefits={selectedBenefits}
